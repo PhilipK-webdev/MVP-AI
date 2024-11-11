@@ -1,22 +1,16 @@
 // app.js
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const { connectDB } = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const apiRoutes = require("./services/api/api-routes.js");
 dotenv.config();
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Middleware
 app.use(cors());
-app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Routes
-app.use('/api/users', userRoutes);
+app.use("/api/", apiRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
