@@ -1,4 +1,4 @@
-const { config } = require("../../dbHelper/db");
+const { config } = require("../../configuration/db");
 
 async function configRepository() {
   try {
