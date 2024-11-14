@@ -6,7 +6,6 @@ function Login() {
   const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("login");
     navigate("/select");
   };
   return (

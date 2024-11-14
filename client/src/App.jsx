@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -7,17 +6,6 @@ import DashboardPage from "./pages/DashboardPage";
 import styled from "styled-components";
 import GlobalStyles from "./styles/globalStyles";
 function App() {
-  // const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    //getConfig();
-  }, []);
-
-  // const getConfig = async () => {
-  //   const response = await fetch("/api/config");
-  //   const result = await response.json();
-  //   console.log(result);
-  // };
   return (
     <AppContainer>
       <GlobalStyles />
@@ -25,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/select" element={<SelectPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/:id" element={<DashboardPage />} />
         </Routes>
       </Router>
     </AppContainer>
