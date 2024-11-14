@@ -1,0 +1,303 @@
+{
+    "sports_and_fitness": {
+        "key": "sports_and_fitness",
+        "id": "001",
+        "question": "which sport are you interested in?",
+        "subtitles": {
+            "gym": {
+                "key": "gym",
+                "id": "001-1",
+                "question": "what type of gym activity do you prefer?",
+                "subtopics": ["strength training", "cardio", "weightlifting", "personal training"]
+            },
+            "crossfit": {
+                "key": "crossfit",
+                "id": "001-2",
+                "question": "which aspect of crossfit interests you?",
+                "subtopics": ["wods", "olympic lifting", "endurance", "functional movements"]
+            },
+            "yoga": {
+                "key": "yoga",
+                "id": "001-3",
+                "question": "which style of yoga do you practice?",
+                "subtopics": ["vinyasa", "hatha", "ashtanga", "restorative"]
+            },
+            "pilates": {
+                "key": "pilates",
+                "id": "001-4",
+                "question": "which type of pilates are you interested in?",
+                "subtopics": ["mat pilates", "reformer pilates", "classical pilates", "contemporary pilates"]
+            },
+            "running": {
+                "key": "running",
+                "id": "001-5",
+                "question": "what type of running do you do?",
+                "subtopics": ["trail running", "road running", "marathon training", "sprint training"]
+            },
+            "cycling": {
+                "key": "cycling",
+                "id": "001-6",
+                "question": "what type of cycling are you interested in?",
+                "subtopics": ["mountain biking", "road cycling", "indoor cycling", "cycling events"]
+            }
+        }
+    },
+    "investments": {
+        "key": "investments",
+        "id": "002",
+        "question": "what type of investment are you interested in?",
+        "subtitles": {
+            "stocks": {
+                "key": "stocks",
+                "id": "002-1",
+                "question": "what type of stocks are you interested in?",
+                "subtopics": ["growth stocks", "dividend stocks", "blue chip stocks", "penny stocks"]
+            },
+            "bonds": {
+                "key": "bonds",
+                "id": "002-2",
+                "question": "which type of bonds do you prefer?",
+                "subtopics": ["government bonds", "corporate bonds", "municipal bonds", "high-yield bonds"]
+            },
+            "mutual_funds": {
+                "key": "mutual_funds",
+                "id": "002-3",
+                "question": "which type of mutual funds are you interested in?",
+                "subtopics": ["equity funds", "bond funds", "index funds", "balanced funds"]
+            },
+            "real_estate_investment_trusts": {
+                "key": "real_estate_investment_trusts",
+                "id": "002-4",
+                "question": "which type of reits are you interested in?",
+                "subtopics": ["residential reits", "commercial reits", "industrial reits", "healthcare reits"]
+            },
+            "commodities": {
+                "key": "commodities",
+                "id": "002-5",
+                "question": "which commodities are you interested in?",
+                "subtopics": ["gold", "oil", "agriculture", "natural gas"]
+            },
+            "cryptocurrency": {
+                "key": "cryptocurrency",
+                "id": "002-6",
+                "question": "which aspect of cryptocurrency interests you?",
+                "subtopics": ["bitcoin", "altcoins", "stablecoins", "staking"]
+            }
+        }
+    },
+    "real_estate": {
+        "key": "real_estate",
+        "id": "003",
+        "question": "which type of real estate are you interested in?",
+        "subtitles": {
+            "residential": {
+                "key": "residential",
+                "id": "003-1",
+                "question": "which type of residential property are you interested in?",
+                "subtopics": ["apartments", "single-family homes", "condominiums", "townhouses"]
+            },
+            "commercial": {
+                "key": "commercial",
+                "id": "003-2",
+                "question": "which type of commercial property interests you?",
+                "subtopics": ["retail", "office", "industrial", "warehouse"]
+            },
+            "industrial": {
+                "key": "industrial",
+                "id": "003-3",
+                "question": "which type of industrial property are you interested in?",
+                "subtopics": ["manufacturing", "distribution centers", "storage facilities", "research labs"]
+            },
+            "land": {
+                "key": "land",
+                "id": "003-4",
+                "question": "which type of land interests you?",
+                "subtopics": ["agricultural land", "development land", "raw land", "infill land"]
+            },
+            "vacation_rentals": {
+                "key": "vacation_rentals",
+                "id": "003-5",
+                "question": "what type of vacation rental are you interested in?",
+                "subtopics": ["beach houses", "mountain cabins", "city apartments", "rural cottages"]
+            },
+            "real_estate_development": {
+                "key": "real_estate_development",
+                "id": "003-6",
+                "question": "which aspect of real estate development interests you?",
+                "subtopics": ["land acquisition", "construction", "project management", "sales & marketing"]
+            }
+        }
+    },
+    "music": {
+        "key": "music",
+        "id": "004",
+        "question": "what aspect of music interests you?",
+        "subtitles": {
+            "genres": {
+                "key": "genres",
+                "id": "004-1",
+                "question": "which genre do you prefer?",
+                "subtopics": ["rock", "pop", "jazz", "classical"]
+            },
+            "instruments": {
+                "key": "instruments",
+                "id": "004-2",
+                "question": "which instrument are you interested in?",
+                "subtopics": ["guitar", "piano", "drums", "violin"]
+            },
+            "bands": {
+                "key": "bands",
+                "id": "004-3",
+                "question": "which type of band interests you?",
+                "subtopics": ["rock bands", "jazz bands", "orchestras", "pop groups"]
+            },
+            "concerts": {
+                "key": "concerts",
+                "id": "004-4",
+                "question": "which type of concert do you prefer?",
+                "subtopics": ["music festivals", "solo performances", "orchestra performances", "live band shows"]
+            },
+            "music_production": {
+                "key": "music_production",
+                "id": "004-5",
+                "question": "which part of music production interests you?",
+                "subtopics": ["recording", "mixing", "mastering", "sound engineering"]
+            },
+            "streaming": {
+                "key": "streaming",
+                "id": "004-6",
+                "question": "which streaming platform do you use?",
+                "subtopics": ["spotify", "apple music", "youtube music", "amazon music"]
+            }
+        }
+    },
+    "cryptocurrency": {
+        "key": "cryptocurrency",
+        "id": "005",
+        "question": "what area of cryptocurrency are you interested in?",
+        "subtitles": {
+            "bitcoin": {
+                "key": "bitcoin",
+                "id": "005-1",
+                "question": "which aspect of bitcoin interests you?",
+                "subtopics": ["mining", "trading", "wallets", "layer 2 solutions"]
+            },
+            "ethereum": {
+                "key": "ethereum",
+                "id": "005-2",
+                "question": "which aspect of ethereum are you interested in?",
+                "subtopics": ["smart contracts", "defi", "nfts", "erc-20 tokens"]
+            },
+            "altcoins": {
+                "key": "altcoins",
+                "id": "005-3",
+                "question": "which altcoins are you interested in?",
+                "subtopics": ["litecoin", "ripple", "cardano", "polkadot"]
+            },
+            "nfts": {
+                "key": "nfts",
+                "id": "005-4",
+                "question": "which type of nfts interests you?",
+                "subtopics": ["art nfts", "gaming nfts", "collectibles", "music nfts"]
+            },
+            "defi": {
+                "key": "defi",
+                "id": "005-5",
+                "question": "which area of defi are you interested in?",
+                "subtopics": ["lending", "yield farming", "liquidity pools", "decentralized exchanges"]
+            },
+            "mining": {
+                "key": "mining",
+                "id": "005-6",
+                "question": "which type of mining interests you?",
+                "subtopics": ["bitcoin mining", "ethereum mining", "mining pools", "cloud mining"]
+            }
+        }
+    },
+    "tech": {
+        "key": "tech",
+        "id": "006",
+        "question": "which area of technology are you interested in?",
+        "subtitles": {
+            "ai": {
+                "key": "ai",
+                "id": "006-1",
+                "question": "which aspect of ai interests you?",
+                "subtopics": ["machine learning", "natural language processing", "computer vision", "reinforcement learning"]
+            },
+            "blockchain": {
+                "key": "blockchain",
+                "id": "006-2",
+                "question": "which aspect of blockchain interests you?",
+                "subtopics": ["smart contracts", "consensus mechanisms", "decentralized applications", "layer 2 solutions"]
+            },
+            "cloud_computing": {
+                "key": "cloud_computing",
+                "id": "006-3",
+                "question": "which cloud computing model are you interested in?",
+                "subtopics": ["iaas", "paas", "saas", "hybrid cloud"]
+            },
+            "cybersecurity": {
+                "key": "cybersecurity",
+                "id": "006-4",
+                "question": "which area of cybersecurity interests you?",
+                "subtopics": ["network security", "application security", "data protection", "threat intelligence"]
+            },
+            "mobile_development": {
+                "key": "mobile_development",
+                "id": "006-5",
+                "question": "which area of mobile development are you interested in?",
+                "subtopics": ["ios development", "android development", "cross-platform", "mobile app testing"]
+            },
+            "web_development": {
+                "key": "web_development",
+                "id": "006-6",
+                "question": "which area of web development interests you?",
+                "subtopics": ["frontend", "backend", "full stack", "web security"]
+            }
+        }
+    },
+    "shopping": {
+        "key": "shopping",
+        "id": "007",
+        "question": "what type of shopping are you interested in?",
+        "subtitles": {
+            "fashion": {
+                "key": "fashion",
+                "id": "007-1",
+                "question": "which type of fashion are you interested in?",
+                "subtopics": ["men's fashion", "women's fashion", "kids' fashion", "accessories"]
+            },
+            "electronics": {
+                "key": "electronics",
+                "id": "007-2",
+                "question": "which type of electronics interests you?",
+                "subtopics": ["mobile phones", "laptops", "gaming consoles", "smart home devices"]
+            },
+            "home_kitchen": {
+                "key": "home_kitchen",
+                "id": "007-3",
+                "question": "which type of home and kitchen items are you interested in?",
+                "subtopics": ["furniture", "appliances", "decor", "cookware"]
+            },
+            "beauty_health": {
+                "key": "beauty_health",
+                "id": "007-4",
+                "question": "which type of beauty or health product are you looking for?",
+                "subtopics": ["skincare", "makeup", "haircare", "wellness products"]
+            },
+            "sports_outdoors": {
+                "key": "sports_outdoors",
+                "id": "007-5",
+                "question": "which type of sports and outdoors items are you interested in?",
+                "subtopics": ["camping gear", "exercise equipment", "outdoor clothing", "water sports"]
+            },
+            "automotive": {
+                "key": "automotive",
+                "id": "007-6",
+                "question": "which type of automotive product are you interested in?",
+                "subtopics": ["car accessories", "motorcycle gear", "auto parts", "car electronics"]
+            }
+        }
+    }
+}
