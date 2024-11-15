@@ -35,7 +35,6 @@ const LoginContainer = styled.main`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: -50px;
 `;
 
 const ImageLogo = styled.img`
