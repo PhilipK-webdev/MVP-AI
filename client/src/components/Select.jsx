@@ -66,7 +66,6 @@ function Select() {
     <SelectContainer>
       <ImageLogo src={Logo} alt="logo image" />
       <Title>Topics</Title>
-
       <Box>
         {config &&
           config.length > 0 &&

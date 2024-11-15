@@ -5,6 +5,7 @@ import SelectPage from "./pages/SelectPage";
 import DashboardPage from "./pages/DashboardPage";
 import styled from "styled-components";
 import GlobalStyles from "./styles/globalStyles";
+import ErrorPage from "./pages/ErrorPage";
 function App() {
   return (
     <>
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/select" element={<SelectPage />} />
             <Route path="/dashboard/:id" element={<DashboardPage />} />
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </Router>
       </AppContainer>

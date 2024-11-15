@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
 body{
-    font-family:'Almoni', Ariel, serif;
+    font-family: "Poppins", sans-serif;
     font-size:18px;
     padding:0;
     background: linear-gradient(180deg, #8359A3, #573B8A, #2D1E5C);
