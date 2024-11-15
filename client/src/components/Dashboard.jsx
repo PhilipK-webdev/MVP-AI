@@ -98,7 +98,14 @@ function Dashboard() {
 
   return (
     <HeaderComponent>
-      <AppBar position="static" style={{ background: "transperent" }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "transparent !important",
+          color: "white !important",
+          boxShadow: "none",
+        }}
+      >
         <Toolbar>
           <IconButton
             size="large"
@@ -182,9 +189,8 @@ function Dashboard() {
 const HeaderComponent = styleds.div`
   width: 100%;
   .css-ptdwpq-MuiPaper-root-MuiAppBar-root {
-    background-color: transparent !important;
-    color: white !important;
-    box-shadow: none;
+    
+    
   }
 `;
 export default Dashboard;

@@ -7,22 +7,23 @@ import styled from "styled-components";
 import GlobalStyles from "./styles/globalStyles";
 function App() {
   return (
-    <AppContainer>
+    <>
       <GlobalStyles />
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/select" element={<SelectPage />} />
-          <Route path="/dashboard/:id" element={<DashboardPage />} />
-        </Routes>
-      </Router>
-    </AppContainer>
+      <AppContainer>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/select" element={<SelectPage />} />
+            <Route path="/dashboard/:id" element={<DashboardPage />} />
+          </Routes>
+        </Router>
+      </AppContainer>
+    </>
   );
 }
 
 const AppContainer = styled.main`
   width: 100%;
-  height: 100vh;
   display: flex;
   justify-content: center;
 `;

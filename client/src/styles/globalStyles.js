@@ -5,7 +5,9 @@ body{
     font-family:'Almoni', Ariel, serif;
     font-size:18px;
     padding:0;
-    background: linear-gradient(to bottom, #8359A3, #573B8A, #2D1E5C);
+    background: linear-gradient(180deg, #8359A3, #573B8A, #2D1E5C);
+    background-attachment: fixed; 
+    background-size: cover;
     color: white;
     height: 100vh; 
 }

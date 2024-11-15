@@ -88,7 +88,6 @@ function Select() {
 }
 
 const SelectContainer = styled.main`
-  height: 70vh;
   padding: 20px;
   font-family: "Poppins", sans-serif;
   display: flex;

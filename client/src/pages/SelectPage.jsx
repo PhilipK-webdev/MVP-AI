@@ -1,12 +1,7 @@
-import React from "react";
 import Select from "../components/Select";
 
 function SelectPage() {
-  return (
-    <div>
-      <Select />
-    </div>
-  );
+  return <Select />;
 }
 
 export default SelectPage;
