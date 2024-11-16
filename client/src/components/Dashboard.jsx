@@ -7,12 +7,11 @@ import CustomAppBar from "./CustomAppBar.jsx";
 import { Divider } from "@mui/material";
 import Loader from "./Loader.jsx";
 import Logo from "../assets/logo.png";
-
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 function Dashboard() {
-  const { selectedId, config } = useContext(StateContext);
+  const { selectedId, config, userId } = useContext(StateContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [topic, setTopic] = useState({});
@@ -23,6 +22,7 @@ function Dashboard() {
   const [isChatEnded, setIsChatEnded] = useState(false);
   const [lastAnswer, setLastAnswer] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openOpenConversations, setOpenConverstations] = useState(false);
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
       const data = config[0];
@@ -85,7 +85,7 @@ function Dashboard() {
             prompt: `Hi chat, give me all information you have on ${key}`,
           }),
         };
-
+        console.log(conversation);
         const response = await fetch("/api/ask", options);
         if (response.status !== 200) {
           throw new Error("Bad Response");
@@ -223,15 +223,27 @@ function Dashboard() {
                       {entry.answer && (
                         <>
                           <Divider style={{ borderColor: "white" }} />
-                          <div
-                            style={{
-                              textAlign: `${lastAnswer ? "left" : "right"}`,
-                              padding: "10px 0",
-                              fontWeight: "500",
-                            }}
-                          >
-                            {entry.answer}
-                          </div>
+                          {lastAnswer ? (
+                            <div
+                              style={{
+                                textAlign: "left",
+                                padding: "10px 0",
+                                fontWeight: "500",
+                              }}
+                            >
+                              {entry.answer}
+                            </div>
+                          ) : (
+                            <div
+                              style={{
+                                textAlign: "right",
+                                padding: "10px 0",
+                                fontWeight: "500",
+                              }}
+                            >
+                              {entry.answer}
+                            </div>
+                          )}
                           <Divider style={{ borderColor: "white" }} />
                         </>
                       )}

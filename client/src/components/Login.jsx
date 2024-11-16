@@ -1,12 +1,37 @@
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { useContext } from "react";
+import { StateContext } from "../context/state.jsx";
 function Login() {
   const currentData = new Date().getFullYear();
+  const { userId } = useContext(StateContext);
   const navigate = useNavigate();
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate("/select");
+    const uuid = uuidv4();
+    try {
+      if (!userId) {
+        const options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: { key: uuid, conversations: [] },
+          }),
+        };
+
+        const response = await fetch("/api/add", options);
+        if (response.status !== 200) {
+          throw new Error("Bad Response");
+        }
+        localStorage.setItem("uuid", uuid);
+      }
+      navigate("/select");
+    } catch (error) {
+      console.log(error);
+      navigate("/error");
+    }
   };
   return (
     <LoginContainer>

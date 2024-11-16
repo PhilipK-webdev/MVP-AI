@@ -34,4 +34,54 @@ async function config() {
   }
 }
 
-module.exports = { getAllUsers, config };
+async function addUser(data) {
+  try {
+    await client.connect();
+    const database = client.db(process.env.DB);
+    const collection = database.collection(process.env.USER_COLLECTION);
+    const result = await collection.insertOne(data);
+    return result;
+  } catch (error) {
+    return new Error("Failed to fetch from DB");
+  }
+}
+
+async function updateUser(updateData) {
+  try {
+    await client.connect();
+    const database = client.db(process.env.DB);
+    const collection = database.collection(process.env.USER_COLLECTION);
+    const findUser = await collection
+      .find({ key: updateData.key }, { projection: { _id: 0, registered: 0 } })
+      .toArray();
+    if (!findUser || findUser.length == 0) {
+      throw new Error("User not found");
+    }
+    const result = await collection.updateOne(
+      { key: updateData.key },
+      { $set: updateData }
+    );
+    return result;
+  } catch (error) {
+    return new Error(error);
+  }
+}
+
+async function getUser(uuid) {
+  try {
+    await client.connect();
+    const database = client.db(process.env.DB);
+    const collection = database.collection(process.env.USER_COLLECTION);
+    const user = await collection
+      .find({ key: uuid.id }, { projection: { _id: 0, registered: 0 } })
+      .toArray();
+    if (!user || user.length == 0) {
+      throw new Error("User not found");
+    }
+    return user;
+  } catch (error) {
+    return new Error(error);
+  }
+}
+
+module.exports = { getAllUsers, config, addUser, updateUser, getUser };
