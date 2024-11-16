@@ -1,11 +1,16 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineStock } from "react-icons/ai";
-import { FaDumbbell, FaBuilding, FaMusic, FaRandom } from "react-icons/fa";
-import { BiBitcoin, BiChip, BiCart } from "react-icons/bi";
 import Logo from "../assets/logo.png";
 import styled from "styled-components";
 import { StateContext } from "../context/state.jsx";
+import Sport from "../assets/training.gif";
+import ShoppingCart from "../assets/shopping-cart.gif";
+import Music from "../assets/music.gif";
+import Investment from "../assets/investment.gif";
+import Tech from "../assets/coding.gif";
+import Building from "../assets/building.gif";
+import Beauty from "../assets/blush.gif";
+import Bitcoin from "../assets/bitcoin.gif";
 function Select() {
   const navigate = useNavigate();
   const { config, setSelectedId } = useContext(StateContext);
@@ -19,45 +24,91 @@ function Select() {
     switch (icon.key) {
       case "sports_and_fitness":
         return (
-          <FaDumbbell
-            title={icon.key}
-            style={{ height: "2em", width: "2em" }}
+          <img
+            src={Sport}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
           />
         );
       case "investments":
         return (
-          <AiOutlineStock
-            style={{ height: "2em", width: "2em" }}
-            title="investments"
+          <img
+            src={Investment}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
           />
         );
       case "real_estate":
         return (
-          <FaBuilding
-            title="Real Estate"
-            style={{ height: "2em", width: "2em" }}
+          <img
+            src={Building}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
           />
         );
       case "music":
         return (
-          <FaMusic title="Music" style={{ height: "2em", width: "2em" }} />
+          <img
+            src={Music}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
+          />
         );
       case "cryptocurrency":
         return (
-          <BiBitcoin
-            title="Cryptocurrency"
-            style={{ height: "2em", width: "2em" }}
+          <img
+            src={Bitcoin}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
           />
         );
       case "tech":
-        return <BiChip title="Tech" style={{ height: "2em", width: "2em" }} />;
+        return (
+          <img
+            src={Tech}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
+          />
+        );
       case "shopping":
         return (
-          <BiCart title="Shopping" style={{ height: "2em", width: "2em" }} />
+          <img
+            src={ShoppingCart}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
+          />
         );
       default:
         return (
-          <FaRandom title="Random" style={{ height: "2em", width: "2em" }} />
+          <img
+            src={Beauty}
+            alt={icon.key}
+            style={{
+              width: "50px",
+              height: "50px",
+            }}
+          />
         );
     }
   };
