@@ -13,7 +13,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { AiOutlineMessage } from "react-icons/ai";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -81,14 +81,9 @@ function CustomDrawer({ open, handleDrawerClose }) {
         <DrawerHeader
           style={{
             display: "flex",
-            justifyContent: `${userExists ? "space-between" : "flex-end"}`,
+            justifyContent: "flex-end",
           }}
         >
-          {userExists && (
-            <IconButton>
-              <AiOutlineMessage style={{ color: "white" }} />
-            </IconButton>
-          )}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon style={{ color: "white" }} />
@@ -97,19 +92,20 @@ function CustomDrawer({ open, handleDrawerClose }) {
             )}
           </IconButton>
         </DrawerHeader>
-        {/* <Divider style={{ borderColor: "white" }} />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
+        <Divider style={{ borderColor: "white" }} />
+        {userExists && (
+          <List>
+            {userData[0].conversations.map((conversation, index) => {
+              return (
+                <ListItem key={index} disablePadding>
+                  <ListItemButton>
+                    <ListItemText primary={conversation.name} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        )}
         <Divider style={{ borderColor: "white" }} />
       </Drawer>
       {/* <Main open={open}>

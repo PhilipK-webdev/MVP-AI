@@ -42,7 +42,14 @@ export const StateProvider = ({ children }) => {
 
   return (
     <StateContext.Provider
-      value={{ config, setSelectedId, selectedId, userId, userData }}
+      value={{
+        config,
+        setSelectedId,
+        selectedId,
+        userId,
+        userData,
+        setUserData,
+      }}
     >
       {children}
     </StateContext.Provider>

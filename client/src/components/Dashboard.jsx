@@ -11,24 +11,27 @@ import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 function Dashboard() {
-  const { selectedId, config, userId } = useContext(StateContext);
+  const { selectedId, config, userData, setUserData } =
+    useContext(StateContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [topic, setTopic] = useState({});
+  const [modifyTopic, setModifyTopic] = useState({});
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [isBegin, setIsBegin] = useState(false);
   const [currentNode, setCurrentNode] = useState();
   const [conversation, setConversation] = useState([]);
   const [isChatEnded, setIsChatEnded] = useState(false);
   const [lastAnswer, setLastAnswer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openOpenConversations, setOpenConverstations] = useState(false);
+  const [prompt, setPrompt] = useState("");
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
       const data = config[0];
       for (const [key, value] of Object.entries(data)) {
         if (value.id === selectedId || value.id === id) {
           setTopic(data[key]);
+          setModifyTopic({ ...data[key], conversation: [] });
           setCurrentNode(data[key]);
           setConversation([
             {
@@ -63,10 +66,6 @@ function Dashboard() {
     e.preventDefault();
     navigate(0);
   };
-  const handleBeginToChat = (e) => {
-    e.preventDefault();
-    setIsBegin(true);
-  };
 
   const handleOptionClick = async (key) => {
     const lastAnswer =
@@ -76,28 +75,38 @@ function Dashboard() {
     setLastAnswer(lastAnswer);
     let chatResponse = "";
     setLoading(true);
+    const dataToModify = { ...modifyTopic };
     if (lastAnswer) {
       try {
         const options = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            prompt: `Hi chat, give me all information you have on ${key}`,
+            prompt: `${prompt} and ${key}`,
           }),
         };
-        console.log(conversation);
         const response = await fetch("/api/ask", options);
         if (response.status !== 200) {
           throw new Error("Bad Response");
         }
-        chatResponse = await response.json();
+        const resChat = await response.json();
+        chatResponse = resChat;
         chatResponse = formatTextToParagraphs(chatResponse.answer);
         setConversation((prev) => {
           const updated = [...prev];
+          dataToModify["conversation"].push({
+            question: updated[updated.length - 1].question,
+            answer: key,
+          });
+          dataToModify["conversation"].push({
+            question: `${prompt} and ${key}`,
+            answer: resChat.answer,
+          });
           updated[updated.length - 1].answer = chatResponse;
           updated[updated.length - 1].chat = key;
           return updated;
         });
+
         setIsChatEnded(true);
       } catch (error) {
         console.log(error);
@@ -105,7 +114,13 @@ function Dashboard() {
     } else {
       setConversation((prev) => {
         const updated = [...prev];
+        dataToModify["conversation"].push({
+          question: updated[updated.length - 1].question,
+          answer: key,
+        });
         updated[updated.length - 1].answer = key;
+        const promptSting = `Hi chat, give me all information you have on ${key}`;
+        setPrompt(promptSting);
         return updated;
       });
       if (currentNode.subtitles && currentNode.subtitles[key]) {
@@ -121,7 +136,9 @@ function Dashboard() {
         ]);
       }
     }
+    setModifyTopic({ ...dataToModify });
     setLoading(false);
+    console.log(modifyTopic);
   };
 
   const handleInputSubmit = async (e) => {
@@ -141,13 +158,14 @@ function Dashboard() {
       if (response.status !== 200) {
         throw new Error("Bad Response");
       }
+      setLoading(false);
       let chatResponse = await response.json();
       chatResponse = formatTextToParagraphs(chatResponse.answer);
       setConversation((prev) => [
         ...prev,
         { question: userInput, answer: chatResponse, options: [] },
       ]);
-      setLoading(false);
+
       e.target.elements.userInput.value = "";
     } catch (error) {
       console.log(error);
@@ -160,6 +178,7 @@ function Dashboard() {
       .filter((line) => line.trim() !== "")
       .map((line, index) => <p key={index}>{line.trim()}</p>);
   };
+
   return (
     <DashboardContainer>
       <HeaderComponent>
@@ -171,133 +190,127 @@ function Dashboard() {
         />
         <CustomDrawer open={openDrawer} handleDrawerClose={handleDrawerClose} />
       </HeaderComponent>
-      <ButtonContainer>
-        <ButtonBegin onClick={handleBeginToChat}>
-          {isBegin ? "In conversation" : "Start conversation"}
-        </ButtonBegin>
-      </ButtonContainer>
-      {isBegin && (
-        <div style={{ padding: "20px" }}>
-          {/* Conversation History */}
-          <div>
-            {conversation.map((entry, index) => {
-              return (
-                <div key={index} style={{ marginBottom: "15px" }}>
-                  <div style={{ paddingBottom: "10px" }}>
-                    <div
+
+      <div style={{ padding: "20px" }}>
+        {/* Conversation History */}
+        <div>
+          {conversation.map((entry, index) => {
+            return (
+              <div key={index} style={{ marginBottom: "15px" }}>
+                <div style={{ paddingBottom: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={Logo}
                       style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img
-                        src={Logo}
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          marginRight: "5px",
-                        }}
-                      />
-                      {entry.question}
-                    </div>
-                  </div>
-                  {entry.options && (
-                    <div>
-                      {entry.options.map((option, idx) => {
-                        return (
-                          <div
-                            key={idx}
-                            onClick={() => handleOptionClick(option)}
-                            className={
-                              option === entry.answer || option === entry.chat
-                                ? "selected-answer"
-                                : "subtitle"
-                            }
-                          >
-                            {option}
-                          </div>
-                        );
-                      })}
-
-                      {entry.answer && (
-                        <>
-                          <Divider style={{ borderColor: "white" }} />
-                          {lastAnswer ? (
-                            <div
-                              style={{
-                                textAlign: "left",
-                                padding: "10px 0",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {entry.answer}
-                            </div>
-                          ) : (
-                            <div
-                              style={{
-                                textAlign: "right",
-                                padding: "10px 0",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {entry.answer}
-                            </div>
-                          )}
-                          <Divider style={{ borderColor: "white" }} />
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            {loading && lastAnswer && <Loader />}
-          </div>
-
-          {isChatEnded && (
-            <form
-              onSubmit={handleInputSubmit}
-              style={{ display: "flex", marginTop: "10px" }}
-            >
-              <Input
-                id="standard-adornment-amount"
-                disableUnderline={true}
-                type="text"
-                autoFocus={true}
-                name="userInput"
-                style={{
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  padding: "10px",
-                  borderRadius: "20px",
-                  border: "1px solid white",
-                  color: "white",
-                  width: "100%",
-                }}
-                startAdornment={
-                  <InputAdornment position="end">
-                    <AccountCircle
-                      sx={{
-                        mr: 1,
-                        my: 0.5,
-                        color: "white",
+                        width: "30px",
+                        height: "30px",
+                        marginRight: "5px",
                       }}
                     />
-                  </InputAdornment>
-                }
-              />
-            </form>
-          )}
+                    {entry.question}
+                  </div>
+                </div>
+                {entry.options && (
+                  <div>
+                    {entry.options.map((option, idx) => {
+                      return (
+                        <div
+                          key={idx}
+                          onClick={() => handleOptionClick(option)}
+                          className={
+                            option === entry.answer || option === entry.chat
+                              ? "selected-answer"
+                              : "subtitle"
+                          }
+                        >
+                          {option}
+                        </div>
+                      );
+                    })}
+
+                    {entry.answer && (
+                      <>
+                        <Divider style={{ borderColor: "white" }} />
+                        {lastAnswer ? (
+                          <div
+                            style={{
+                              textAlign: "left",
+                              padding: "10px 0",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {entry.answer}
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              textAlign: "right",
+                              padding: "10px 0",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {entry.answer}
+                          </div>
+                        )}
+                        <Divider style={{ borderColor: "white" }} />
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {loading && lastAnswer && <Loader />}
         </div>
-      )}
+
+        {isChatEnded && (
+          <form
+            onSubmit={handleInputSubmit}
+            style={{ display: "flex", marginTop: "10px" }}
+          >
+            <Input
+              id="standard-adornment-amount"
+              disableUnderline={true}
+              type="text"
+              autoFocus={true}
+              name="userInput"
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                padding: "10px",
+                borderRadius: "20px",
+                border: "1px solid white",
+                color: "white",
+                width: "100%",
+              }}
+              startAdornment={
+                <InputAdornment position="end">
+                  <AccountCircle
+                    sx={{
+                      mr: 1,
+                      my: 0.5,
+                      color: "white",
+                    }}
+                  />
+                </InputAdornment>
+              }
+            />
+          </form>
+        )}
+      </div>
     </DashboardContainer>
   );
 }
 
 const DashboardContainer = styled.div`
   width: 100%;
-  height: auto;
+  height: 100vh;
   overflow: auto;
 
   .subtitle {

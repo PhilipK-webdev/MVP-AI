@@ -60,6 +60,7 @@ const LoginContainer = styled.main`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 100vh;
 `;
 
 const ImageLogo = styled.img`

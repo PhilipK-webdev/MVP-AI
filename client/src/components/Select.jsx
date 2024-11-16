@@ -87,7 +87,6 @@ function Select() {
 }
 
 const SelectContainer = styled.main`
-  padding: 20px;
   font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
