@@ -300,4 +300,43 @@
             }
         }
     }
+    {
+        "beauty": {
+            "key": "beauty",
+            "id": "008",
+            "question": "what aspect of beauty are you interested in?",
+            "subtitles": {
+                "skincare": {
+                    "key": "skincare",
+                    "id": "008-1",
+                    "question": "what type of skincare products do you use?",
+                    "subtopics": ["moisturizers", "cleansers", "serums", "sunscreen"]
+                },
+                "makeup": {
+                    "key": "makeup",
+                    "id": "008-2",
+                    "question": "which makeup products interest you?",
+                    "subtopics": ["lipstick", "foundation", "eyeshadow", "mascara"]
+                },
+                "haircare": {
+                    "key": "haircare",
+                    "id": "008-3",
+                    "question": "what type of haircare products do you prefer?",
+                    "subtopics": ["shampoos", "conditioners", "hair masks", "styling products"]
+                },
+                "nailcare": {
+                    "key": "nailcare",
+                    "id": "008-4",
+                    "question": "what aspect of nailcare interests you?",
+                    "subtopics": ["manicure", "pedicure", "nail polish", "nail art"]
+                },
+                "wellness": {
+                    "key": "wellness",
+                    "id": "008-5",
+                    "question": "which wellness products are you looking for?",
+                    "subtopics": ["aromatherapy", "massagers", "bath salts", "spa treatments"]
+                }
+            }
+        }
+    }
 }
