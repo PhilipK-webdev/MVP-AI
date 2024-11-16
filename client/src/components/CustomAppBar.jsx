@@ -5,7 +5,13 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../assets/logo.png";
 import { FaBackward } from "react-icons/fa";
-function CustomAppBar({ topic, handleDrawerOpen, handleBack }) {
+import { IoReload } from "react-icons/io5";
+function CustomAppBar({
+  topic,
+  handleDrawerOpen,
+  handleBack,
+  handleReloadPage,
+}) {
   return (
     <AppBar
       position="static"
@@ -37,12 +43,22 @@ function CustomAppBar({ topic, handleDrawerOpen, handleBack }) {
             height: "35px",
           }}
         />
-        <IconButton style={{ color: "white" }} onClick={handleBack}>
-          <FaBackward
-            style={{ height: "1em", width: "1em", cursor: "pointer" }}
-            title="Refresh"
-          />
-        </IconButton>
+        <FaBackward
+          onClick={handleBack}
+          style={{
+            height: "1.2em",
+            width: "1.2em",
+            cursor: "pointer",
+            marginRight: "5px",
+            marginLeft: "2px",
+          }}
+          title="Back"
+        />
+        <IoReload
+          style={{ height: "1.2em", width: "1.2em", cursor: "pointer" }}
+          title="Refresh"
+          onClick={handleReloadPage}
+        />
       </Toolbar>
     </AppBar>
   );

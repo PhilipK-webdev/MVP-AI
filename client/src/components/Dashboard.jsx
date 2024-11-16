@@ -1,10 +1,16 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { StateContext } from "../context/state.jsx";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import CustomDrawer from "./CustomDrawer.jsx";
 import CustomAppBar from "./CustomAppBar.jsx";
 import { Divider } from "@mui/material";
+import Loader from "./Loader.jsx";
+import Logo from "../assets/logo.png";
+
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 function Dashboard() {
   const { selectedId, config } = useContext(StateContext);
   const { id } = useParams();
@@ -12,10 +18,11 @@ function Dashboard() {
   const [topic, setTopic] = useState({});
   const [openDrawer, setOpenDrawer] = useState(false);
   const [isBegin, setIsBegin] = useState(false);
-  const [currentNode, setCurrentNode] = useState(); // Start at root
-  const [conversation, setConversation] = useState([]); // Track conversation flow
+  const [currentNode, setCurrentNode] = useState();
+  const [conversation, setConversation] = useState([]);
   const [isChatEnded, setIsChatEnded] = useState(false);
   const [lastAnswer, setLastAnswer] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
       const data = config[0];
@@ -52,7 +59,10 @@ function Dashboard() {
     e.preventDefault();
     navigate(-1);
   };
-
+  const handleReloadPage = (e) => {
+    e.preventDefault();
+    navigate(0);
+  };
   const handleBeginToChat = (e) => {
     e.preventDefault();
     setIsBegin(true);
@@ -65,6 +75,7 @@ function Dashboard() {
       currentNode.subtopics.some((s) => s === key);
     setLastAnswer(lastAnswer);
     let chatResponse = "";
+    setLoading(true);
     if (lastAnswer) {
       try {
         const options = {
@@ -80,11 +91,11 @@ function Dashboard() {
           throw new Error("Bad Response");
         }
         chatResponse = await response.json();
-        console.log(chatResponse);
-        //loading spinner
+        chatResponse = formatTextToParagraphs(chatResponse.answer);
         setConversation((prev) => {
           const updated = [...prev];
-          updated[updated.length - 1].answer = chatResponse.answer;
+          updated[updated.length - 1].answer = chatResponse;
+          updated[updated.length - 1].chat = key;
           return updated;
         });
         setIsChatEnded(true);
@@ -110,11 +121,13 @@ function Dashboard() {
         ]);
       }
     }
+    setLoading(false);
   };
 
   const handleInputSubmit = async (e) => {
     e.preventDefault();
     const userInput = e.target.elements.userInput.value;
+    setLoading(true);
     try {
       const options = {
         method: "POST",
@@ -128,16 +141,24 @@ function Dashboard() {
       if (response.status !== 200) {
         throw new Error("Bad Response");
       }
-      const chatResponse = await response.json();
-      console.log(chatResponse);
-
+      let chatResponse = await response.json();
+      chatResponse = formatTextToParagraphs(chatResponse.answer);
       setConversation((prev) => [
         ...prev,
-        { question: userInput, answer: chatResponse.answer, options: [] },
+        { question: userInput, answer: chatResponse, options: [] },
       ]);
+      setLoading(false);
+      e.target.elements.userInput.value = "";
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const formatTextToParagraphs = (inputText) => {
+    return inputText
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .map((line, index) => <p key={index}>{line.trim()}</p>);
   };
   return (
     <DashboardContainer>
@@ -146,6 +167,7 @@ function Dashboard() {
           topic={topic}
           handleDrawerOpen={handleDrawerOpen}
           handleBack={handleBack}
+          handleReloadPage={handleReloadPage}
         />
         <CustomDrawer open={openDrawer} handleDrawerClose={handleDrawerClose} />
       </HeaderComponent>
@@ -161,7 +183,25 @@ function Dashboard() {
             {conversation.map((entry, index) => {
               return (
                 <div key={index} style={{ marginBottom: "15px" }}>
-                  <div style={{ paddingBottom: "10px" }}>{entry.question}</div>
+                  <div style={{ paddingBottom: "10px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={Logo}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          marginRight: "5px",
+                        }}
+                      />
+                      {entry.question}
+                    </div>
+                  </div>
                   {entry.options && (
                     <div>
                       {entry.options.map((option, idx) => {
@@ -170,7 +210,7 @@ function Dashboard() {
                             key={idx}
                             onClick={() => handleOptionClick(option)}
                             className={
-                              option === entry.answer
+                              option === entry.answer || option === entry.chat
                                 ? "selected-answer"
                                 : "subtitle"
                             }
@@ -185,7 +225,7 @@ function Dashboard() {
                           <Divider style={{ borderColor: "white" }} />
                           <div
                             style={{
-                              textAlign: "right",
+                              textAlign: `${lastAnswer ? "left" : "right"}`,
                               padding: "10px 0",
                               fontWeight: "500",
                             }}
@@ -200,70 +240,44 @@ function Dashboard() {
                 </div>
               );
             })}
+            {loading && lastAnswer && <Loader />}
           </div>
 
-          {/* Input Field if Chat Ends */}
           {isChatEnded && (
             <form
               onSubmit={handleInputSubmit}
               style={{ display: "flex", marginTop: "10px" }}
             >
-              <input
-                name="userInput"
+              <Input
+                id="standard-adornment-amount"
+                disableUnderline={true}
                 type="text"
-                placeholder="Message MVP_AI"
+                autoFocus={true}
+                name="userInput"
                 style={{
-                  flex: "1",
+                  display: "flex",
+                  flexDirection: "row-reverse",
                   padding: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #ccc",
-                  marginRight: "10px",
-                  color: "black",
+                  borderRadius: "20px",
+                  border: "1px solid white",
+                  color: "white",
+                  width: "100%",
                 }}
+                startAdornment={
+                  <InputAdornment position="end">
+                    <AccountCircle
+                      sx={{
+                        mr: 1,
+                        my: 0.5,
+                        color: "white",
+                      }}
+                    />
+                  </InputAdornment>
+                }
               />
-              <button
-                type="submit"
-                style={{
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  border: "1px solid #ccc",
-                  backgroundColor: "#007bff",
-                  color: "black",
-                  cursor: "pointer",
-                }}
-              >
-                Send
-              </button>
             </form>
           )}
         </div>
-        // <div style={{ padding: "20px" }}>
-        //   <div style={{ paddingBottom: "10px" }}>{currentNode.question}</div>
-        //   <div>
-        //     {currentNode.subtitles &&
-        //       Object.keys(currentNode.subtitles).map((key) => (
-        //         <div
-        //           className="subtitle"
-        //           key={topic.subtitles[key].id}
-        //           onClick={() => handleOptionClick(key)}
-        //         >
-        //           {key}
-        //         </div>
-        //       ))}
-        //   </div>
-        // </div>
-        // <div style={{ padding: "20px" }}>
-        //   <div style={{ paddingBottom: "10px" }}>{topic.question}</div>
-        //   {Object.keys(topic.subtitles).map((sub) => {
-        //     return (
-        //       <div className="subtitle" key={topic.subtitles[sub].id}>
-        //         {sub}
-        //       </div>
-        //     );
-        //   })}
-        //   <Divider style={{ borderColor: "white" }} />
-        //   <div style={{ textAlign: "right", paddingTop: "10px" }}>Answer</div>
-        // </div>
       )}
     </DashboardContainer>
   );
@@ -310,7 +324,7 @@ const ButtonContainer = styled.div`
 const ButtonBegin = styled.button`
   width: 62vw;
   height: 20px;
-  margin-top: 20px;
+  margin-top: 80px;
   padding: 20px;
   display: flex;
   justify-content: center;

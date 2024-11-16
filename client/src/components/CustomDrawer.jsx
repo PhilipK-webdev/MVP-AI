@@ -94,9 +94,9 @@ function CustomDrawer({ open, handleDrawerClose }) {
         </List>
         <Divider style={{ borderColor: "white" }} />
       </Drawer>
-      <Main open={open}>
+      {/* <Main open={open}>
         <DrawerHeader />
-      </Main>
+      </Main> */}
     </>
   );
 }
