@@ -4,8 +4,9 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../assets/logo.png";
-import { FaBackward } from "react-icons/fa";
+import newLogo from "../assets/newLogo.png";
 import { IoReload } from "react-icons/io5";
+import { IoMdArrowBack } from "react-icons/io";
 function CustomAppBar({
   topic,
   handleDrawerOpen,
@@ -36,21 +37,22 @@ function CustomAppBar({
           {topic.name}
         </Typography>
         <img
-          src={Logo}
+          src={newLogo}
           alt="logo image"
           style={{
-            width: "35px",
-            height: "35px",
+            width: "45px",
+            height: "45px",
+            marginRight: "-9px",
+            marginTop: "5px",
           }}
         />
-        <FaBackward
+        <IoMdArrowBack
           onClick={handleBack}
           style={{
-            height: "1.2em",
-            width: "1.2em",
+            height: "1.5em",
+            width: "1.5em",
             cursor: "pointer",
             marginRight: "5px",
-            marginLeft: "2px",
           }}
           title="Back"
         />

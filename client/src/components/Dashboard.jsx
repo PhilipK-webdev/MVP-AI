@@ -4,15 +4,10 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import CustomDrawer from "./CustomDrawer.jsx";
 import CustomAppBar from "./CustomAppBar.jsx";
-import { Divider } from "@mui/material";
-import Loader from "./Loader.jsx";
-import Logo from "../assets/logo.png";
-import Input from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import CustomInput from "./CustomInput.jsx";
+import Chat from "./Chat.jsx";
 function Dashboard() {
-  const { selectedId, config, userData, setUserData } =
-    useContext(StateContext);
+  const { selectedId, config } = useContext(StateContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [topic, setTopic] = useState({});
@@ -23,7 +18,6 @@ function Dashboard() {
   const [isChatEnded, setIsChatEnded] = useState(false);
   const [lastAnswer, setLastAnswer] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [openOpenConversations, setOpenConverstations] = useState(false);
   const [prompt, setPrompt] = useState("");
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
@@ -36,8 +30,11 @@ function Dashboard() {
           setConversation([
             {
               sender: "system",
-              question: data[key].question,
-              answer: null,
+              questionAI: data[key].question,
+              questionUser: null,
+              systemAnswer: null,
+              userAnswer: null,
+              isAnswer: false,
               options: [...Object.keys(data[key].subtitles)],
             },
           ]);
@@ -95,18 +92,18 @@ function Dashboard() {
         setConversation((prev) => {
           const updated = [...prev];
           dataToModify["conversation"].push({
-            question: updated[updated.length - 1].question,
-            answer: key,
+            questionAI: updated[updated.length - 1].question,
+            userAnswer: key,
           });
           dataToModify["conversation"].push({
-            question: `${prompt} and ${key}`,
-            answer: resChat.answer,
+            questionAI: `${prompt} and ${key}`,
+            systemAnswer: resChat.answer,
           });
-          updated[updated.length - 1].answer = chatResponse;
+          updated[updated.length - 1].systemAnswer = chatResponse;
           updated[updated.length - 1].chat = key;
+          updated[updated.length - 1].isAnswer = true;
           return updated;
         });
-
         setIsChatEnded(true);
       } catch (error) {
         console.log(error);
@@ -115,10 +112,11 @@ function Dashboard() {
       setConversation((prev) => {
         const updated = [...prev];
         dataToModify["conversation"].push({
-          question: updated[updated.length - 1].question,
-          answer: key,
+          questionAI: updated[updated.length - 1].question,
+          userAnswer: key,
         });
-        updated[updated.length - 1].answer = key;
+        updated[updated.length - 1].userAnswer = key;
+        updated[updated.length - 1].isAnswer = true;
         const promptSting = `Hi chat, give me all information you have on ${key}`;
         setPrompt(promptSting);
         return updated;
@@ -129,8 +127,11 @@ function Dashboard() {
         setConversation((prev) => [
           ...prev,
           {
-            question: nextNode.question,
-            answer: null,
+            questionAI: nextNode.question,
+            questionUser: null,
+            userAnswer: null,
+            systemAnswer: null,
+            isAnswer: false,
             options: nextNode.subtopics || [],
           },
         ]);
@@ -138,7 +139,6 @@ function Dashboard() {
     }
     setModifyTopic({ ...dataToModify });
     setLoading(false);
-    console.log(modifyTopic);
   };
 
   const handleInputSubmit = async (e) => {
@@ -163,7 +163,12 @@ function Dashboard() {
       chatResponse = formatTextToParagraphs(chatResponse.answer);
       setConversation((prev) => [
         ...prev,
-        { question: userInput, answer: chatResponse, options: [] },
+        {
+          questionUser: userInput,
+          systemAnswer: chatResponse,
+          options: [],
+          sender: "system",
+        },
       ]);
 
       e.target.elements.userInput.value = "";
@@ -179,6 +184,7 @@ function Dashboard() {
       .map((line, index) => <p key={index}>{line.trim()}</p>);
   };
 
+  console.log(conversation);
   return (
     <DashboardContainer>
       <HeaderComponent>
@@ -191,119 +197,15 @@ function Dashboard() {
         <CustomDrawer open={openDrawer} handleDrawerClose={handleDrawerClose} />
       </HeaderComponent>
 
-      <div style={{ padding: "20px" }}>
-        {/* Conversation History */}
-        <div>
-          {conversation.map((entry, index) => {
-            return (
-              <div key={index} style={{ marginBottom: "15px" }}>
-                <div style={{ paddingBottom: "10px" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={Logo}
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        marginRight: "5px",
-                      }}
-                    />
-                    {entry.question}
-                  </div>
-                </div>
-                {entry.options && (
-                  <div>
-                    {entry.options.map((option, idx) => {
-                      return (
-                        <div
-                          key={idx}
-                          onClick={() => handleOptionClick(option)}
-                          className={
-                            option === entry.answer || option === entry.chat
-                              ? "selected-answer"
-                              : "subtitle"
-                          }
-                        >
-                          {option}
-                        </div>
-                      );
-                    })}
-
-                    {entry.answer && (
-                      <>
-                        <Divider style={{ borderColor: "white" }} />
-                        {lastAnswer ? (
-                          <div
-                            style={{
-                              textAlign: "left",
-                              padding: "10px 0",
-                              fontWeight: "500",
-                            }}
-                          >
-                            {entry.answer}
-                          </div>
-                        ) : (
-                          <div
-                            style={{
-                              textAlign: "right",
-                              padding: "10px 0",
-                              fontWeight: "500",
-                            }}
-                          >
-                            {entry.answer}
-                          </div>
-                        )}
-                        <Divider style={{ borderColor: "white" }} />
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-          {loading && lastAnswer && <Loader />}
-        </div>
-
-        {isChatEnded && (
-          <form
-            onSubmit={handleInputSubmit}
-            style={{ display: "flex", marginTop: "10px" }}
-          >
-            <Input
-              id="standard-adornment-amount"
-              disableUnderline={true}
-              type="text"
-              autoFocus={true}
-              name="userInput"
-              style={{
-                display: "flex",
-                flexDirection: "row-reverse",
-                padding: "10px",
-                borderRadius: "20px",
-                border: "1px solid white",
-                color: "white",
-                width: "100%",
-              }}
-              startAdornment={
-                <InputAdornment position="end">
-                  <AccountCircle
-                    sx={{
-                      mr: 1,
-                      my: 0.5,
-                      color: "white",
-                    }}
-                  />
-                </InputAdornment>
-              }
-            />
-          </form>
-        )}
-      </div>
+      <ConversationContainer>
+        <Chat
+          conversation={conversation}
+          handleOptionClick={handleOptionClick}
+          loading={loading}
+          lastAnswer={lastAnswer}
+        />
+        {isChatEnded && <CustomInput handleInputSubmit={handleInputSubmit} />}
+      </ConversationContainer>
     </DashboardContainer>
   );
 }
@@ -321,6 +223,7 @@ const DashboardContainer = styled.div`
     text-align: center;
     border-radius: 10px;
     cursor: pointer;
+    width: 100%;
   }
 
   .selected-answer {
@@ -334,6 +237,7 @@ const DashboardContainer = styled.div`
     text-align: center;
     border-radius: 10px;
     cursor: pointer;
+    width: 100%;
   }
 `;
 
@@ -341,22 +245,7 @@ const HeaderComponent = styled.div`
   width: 100%;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-bottom: 10px;
-`;
-const ButtonBegin = styled.button`
-  width: 62vw;
-  height: 20px;
-  margin-top: 80px;
+const ConversationContainer = styled.div`
   padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  background: #7615e1;
-  color: white;
-  border: none;
 `;
 export default Dashboard;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Logo from "../assets/logo.png";
+import newLogo from "../assets/newLogo.png";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
@@ -35,7 +36,7 @@ function Login() {
   };
   return (
     <LoginContainer>
-      <ImageLogo src={Logo} alt="logo image" />
+      <ImageLogo src={newLogo} alt="logo image" />
       <Section>
         <div>
           <p>{currentData}</p>

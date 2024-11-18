@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
+import newLogo from "../assets/newLogo.png";
 import styled from "styled-components";
 import { StateContext } from "../context/state.jsx";
 import Sport from "../assets/training.gif";
@@ -115,7 +116,7 @@ function Select() {
 
   return (
     <SelectContainer>
-      <ImageLogo src={Logo} alt="logo image" />
+      <ImageLogo src={newLogo} alt="logo image" />
       <Title>Topics</Title>
       <Box>
         {config &&
