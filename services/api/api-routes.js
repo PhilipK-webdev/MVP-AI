@@ -5,6 +5,8 @@ const {
   addUser,
   updateUser,
   getUser,
+  getMessages,
+  setConversation,
 } = require("../../configuration/db");
 const { configService } = require("../config/getConfig.service");
 const OpenAIClass = require("../../class/OpenAIClass");
@@ -29,9 +31,9 @@ router.get("/config", async (req, res) => {
 
 router.post("/ask", async (req, res) => {
   const openaiClient = new OpenAIClass();
-  const { prompt } = req.body;
+  const { prompt, userUUID, messageUUID } = req.body;
   try {
-    const answer = await openaiClient.ask(prompt);
+    const answer = await openaiClient.ask(prompt, userUUID, messageUUID);
     res.json({ answer });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -66,6 +68,24 @@ router.get("/user", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+router.get("/message", async (req, res) => {
+  try {
+    const { userKey, messageKey } = req.query;
+    const data = await getMessages(userKey, messageKey);
+    return res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/add-conversation", async (req, res) => {
+  try {
+    const { uuid, title } = req.body;
+    const result = await setConversation(uuid, title);
+    res.json(result);
+  } catch (error) {}
 });
 
 module.exports = router;

@@ -4,67 +4,23 @@ import { Divider } from "@mui/material";
 import newLogo from "../assets/newLogo.png";
 import Avatar from "@mui/material/Avatar";
 import randomUser from "../assets/randomAvatar.png";
+import styled from "styled-components";
 function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
   return (
     <div>
       {conversation.length > 0 &&
         conversation.map((entry, index) => {
           return (
-            <div key={index} style={{ marginBottom: "15px" }}>
-              <div style={{ paddingBottom: "10px" }}>
+            <ChatContainer key={index}>
+              <QuestionContainer>
                 {entry.questionAI ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      fontWeight: "500",
-                      border: "1px solid #a092fe",
-                      padding: "10px",
-                      fontSize: "15px",
-                      marginBottom: " 10px",
-                      marginTop: "10px",
-                      borderRadius: "10px",
-                      background: "#FCFFFE",
-                      color: "#B5B5B6",
-                    }}
-                  >
-                    <img
-                      src={newLogo}
-                      style={{
-                        width: "45px",
-                        height: "45px",
-                        marginRight: "5px",
-                        borderRadius: "50%",
-                        background: "#a092fe",
-                      }}
-                    />
+                  <QuestionAIContainer>
+                    <ImageLogo src={newLogo} />
                     {entry.questionAI}
-                  </div>
+                  </QuestionAIContainer>
                 ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "start",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <div
-                      style={{
-                        textAlign: "right",
-                        fontWeight: "500",
-                        border: "3px solid #526E48",
-                        padding: "10px",
-                        fontSize: "15px",
-                        marginBottom: " 10px",
-                        marginTop: "10px",
-                        borderRadius: "10px",
-                        background: "white",
-                        color: "#526E48",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
+                  <QuestionUserContainer>
+                    <QuestionUser>
                       <Avatar
                         src={randomUser}
                         sx={{
@@ -74,10 +30,10 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
                         }}
                       />
                       {entry.questionUser}
-                    </div>
-                  </div>
+                    </QuestionUser>
+                  </QuestionUserContainer>
                 )}
-              </div>
+              </QuestionContainer>
               {entry.options && (
                 <div>
                   {entry.options.map((option, idx) => {
@@ -101,25 +57,9 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
                     {(entry.userAnswer || entry.systemAnswer) && (
                       <Divider style={{ borderColor: "white" }} />
                     )}
-                    {entry.chat && (
-                      <div
-                        style={{
-                          textAlign: "right",
-                          fontWeight: "600",
-                          border: "1px solid #FCFFFE",
-                          padding: "10px",
-                          fontSize: "16px",
-                          marginBottom: " 10px",
-                          marginTop: "10px",
-                          borderRadius: "10px",
-                          background: "#a092fe",
-                          color: "white",
-                          width: "fit-content",
-                          display: "flex",
-                          justifyContent: "center",
-                          marginLeft: "auto",
-                        }}
-                      >
+
+                    {(entry.userAnswer || entry.chat) && (
+                      <UserAnswerContainer>
                         <Avatar
                           src={randomUser}
                           sx={{
@@ -128,67 +68,15 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
                             marginRight: "5px",
                           }}
                         />
-                        {entry.chat}
-                      </div>
-                    )}
-                    {entry.userAnswer && (
-                      <div
-                        style={{
-                          textAlign: "right",
-                          fontWeight: "600",
-                          border: "1px solid #FCFFFE",
-                          padding: "10px",
-                          fontSize: "16px",
-                          marginBottom: " 10px",
-                          marginTop: "10px",
-                          borderRadius: "10px",
-                          background: "#a092fe",
-                          color: "white",
-                          width: "100px",
-                          display: "flex",
-                          justifyContent: "center",
-                          marginLeft: "auto",
-                        }}
-                      >
-                        <Avatar
-                          src={randomUser}
-                          sx={{
-                            width: 23,
-                            height: 23,
-                            marginRight: "5px",
-                          }}
-                        />
-                        {entry.userAnswer}
-                      </div>
+                        {entry.userAnswer ? entry.userAnswer : entry.chat}
+                      </UserAnswerContainer>
                     )}
                     {entry.systemAnswer && (
                       <>
-                        <div
-                          style={{
-                            display: "flex",
-                            fontWeight: "500",
-                            padding: "10px",
-                            fontSize: "15px",
-                            marginBottom: " 10px",
-                            marginTop: "10px",
-                            borderRadius: " 10px",
-                            background: "#FCFFFE",
-                            color: "#B5B5B6",
-                            width: "100%",
-                          }}
-                        >
-                          <img
-                            src={newLogo}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              marginRight: "5px",
-                              borderRadius: "50%",
-                              background: "#a092fe",
-                            }}
-                          />
+                        <SystemAnswerContainer>
+                          <ImageLogo src={newLogo} />
                           <div>{entry.systemAnswer}</div>
-                        </div>
+                        </SystemAnswerContainer>
                       </>
                     )}
                     {(entry.userAnswer || entry.systemAnswer) && (
@@ -197,7 +85,7 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
                   </>
                 </div>
               )}
-            </div>
+            </ChatContainer>
           );
         })}
       {loading && lastAnswer && <Loader />}
@@ -205,4 +93,85 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
   );
 }
 
+const ChatContainer = styled.div`
+  margin-bottom: 15px;
+`;
+
+const QuestionContainer = styled.div`
+  padding-bottom: 10px;
+`;
+
+const QuestionAIContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 500;
+  border: 1px solid #a092fe;
+  padding: 10px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #fcfffe;
+  color: #b5b5b6;
+`;
+
+const ImageLogo = styled.img`
+  width: 45px;
+  height: 45px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #a092fe;
+`;
+
+const QuestionUserContainer = styled.div`
+  display: flex;
+  align-items: start;
+  justify-content: flex-end;
+`;
+
+const QuestionUser = styled.div`
+  text-align: right;
+  font-weight: 500;
+  border: 3px solid #526e48;
+  padding: 10px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: white;
+  color: #526e48;
+  display: flex;
+  justify-content: center;
+`;
+
+const UserAnswerContainer = styled.div`
+  text-align: right;
+  font-weight: 600;
+  border: 1px solid #fcfffe;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #a092fe;
+  color: white;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+`;
+
+const SystemAnswerContainer = styled.div`
+  display: flex;
+  font-weight: 500;
+  padding: 10px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #fcfffe;
+  color: #b5b5b6;
+  width: 100%;
+`;
 export default Chat;

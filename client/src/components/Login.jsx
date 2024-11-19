@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Logo from "../assets/logo.png";
 import newLogo from "../assets/newLogo.png";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";

@@ -7,7 +7,7 @@ import CustomAppBar from "./CustomAppBar.jsx";
 import CustomInput from "./CustomInput.jsx";
 import Chat from "./Chat.jsx";
 function Dashboard() {
-  const { selectedId, config } = useContext(StateContext);
+  const { selectedId, config, userId } = useContext(StateContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [topic, setTopic] = useState({});
@@ -19,6 +19,9 @@ function Dashboard() {
   const [lastAnswer, setLastAnswer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const [answerOne, setAnswerOne] = useState("");
+  const [answerTwo, setAnswerTwo] = useState("");
+  const [messageUUID, setMessageUUID] = useState("");
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
       const data = config[0];
@@ -65,6 +68,7 @@ function Dashboard() {
   };
 
   const handleOptionClick = async (key) => {
+    setAnswerTwo(key);
     const lastAnswer =
       currentNode.subtopics &&
       currentNode.subtopics.length > 0 &&
@@ -75,11 +79,27 @@ function Dashboard() {
     const dataToModify = { ...modifyTopic };
     if (lastAnswer) {
       try {
-        const options = {
+        let options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uuid: userId || localStorage.getItem("uuid"),
+            title: `${topic.name} - ${answerOne} and ${key}`,
+          }),
+        };
+        const res = await fetch("/api/add-conversation", options);
+        if (res.status !== 200) {
+          throw new Error("Bad Response");
+        }
+        const resuuid = await res.json();
+        setMessageUUID(resuuid);
+        options = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             prompt: `${prompt} and ${key}`,
+            userUUID: userId || localStorage.getItem("uuid"),
+            messageUUID: resuuid,
           }),
         };
         const response = await fetch("/api/ask", options);
@@ -109,6 +129,7 @@ function Dashboard() {
         console.log(error);
       }
     } else {
+      setAnswerOne(key);
       setConversation((prev) => {
         const updated = [...prev];
         dataToModify["conversation"].push({
@@ -151,6 +172,8 @@ function Dashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: userInput,
+          userUUID: userId || localStorage.getItem("uuid"),
+          messageUUID,
         }),
       };
 
@@ -184,7 +207,6 @@ function Dashboard() {
       .map((line, index) => <p key={index}>{line.trim()}</p>);
   };
 
-  console.log(conversation);
   return (
     <DashboardContainer>
       <HeaderComponent>
