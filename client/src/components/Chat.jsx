@@ -5,8 +5,9 @@ import newLogo from "../assets/newLogo.png";
 import Avatar from "@mui/material/Avatar";
 import randomUser from "../assets/randomAvatar.png";
 import styled from "styled-components";
-function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
+function Chat({ conversation, handleOptionClick, loading }) {
   return (
+    //<div></div>
     <div>
       {conversation.length > 0 &&
         conversation.map((entry, index) => {
@@ -39,16 +40,16 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
                   {entry.options.map((option, idx) => {
                     return (
                       <button
-                        disabled={entry.isAnswer || loading}
+                        disabled={entry.userAnswer || loading}
                         key={idx}
                         onClick={() => handleOptionClick(option)}
                         className={
-                          option === entry.userAnswer || option === entry.chat
+                          option.key === entry.userAnswer
                             ? "selected-answer"
                             : "subtitle"
                         }
                       >
-                        {option}
+                        {option.key}
                       </button>
                     );
                   })}
@@ -88,7 +89,7 @@ function Chat({ conversation, handleOptionClick, loading, lastAnswer }) {
             </ChatContainer>
           );
         })}
-      {loading && lastAnswer && <Loader />}
+      {loading && <Loader />}
     </div>
   );
 }
@@ -156,7 +157,7 @@ const UserAnswerContainer = styled.div`
   border-radius: 10px;
   background: #a092fe;
   color: white;
-  width: 100px;
+  width: fit-content;
   display: flex;
   justify-content: center;
   margin-left: auto;

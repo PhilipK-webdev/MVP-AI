@@ -113,25 +113,20 @@ function Select() {
         );
     }
   };
-
+  const data = config[0]?.topics;
   return (
     <SelectContainer>
       <ImageLogo src={newLogo} alt="logo image" />
       <Title>Topics</Title>
       <Box>
-        {config &&
-          config.length > 0 &&
-          config.map((data) => {
-            return Object.keys(data).map((key) => {
-              return (
-                <BoxIcon
-                  onClick={(e) => goToDashboard(e, data[key].id)}
-                  key={data[key].id}
-                >
-                  {renderIcon(data[key])}
-                </BoxIcon>
-              );
-            });
+        {data &&
+          data.length > 0 &&
+          data.map((d) => {
+            return (
+              <BoxIcon onClick={(e) => goToDashboard(e, d.id)} key={d.id}>
+                {renderIcon(d)}
+              </BoxIcon>
+            );
           })}
       </Box>
     </SelectContainer>

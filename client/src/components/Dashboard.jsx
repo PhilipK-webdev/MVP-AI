@@ -16,32 +16,25 @@ function Dashboard() {
   const [currentNode, setCurrentNode] = useState();
   const [conversation, setConversation] = useState([]);
   const [isChatEnded, setIsChatEnded] = useState(false);
-  const [lastAnswer, setLastAnswer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [answerOne, setAnswerOne] = useState("");
-  const [answerTwo, setAnswerTwo] = useState("");
+
   const [messageUUID, setMessageUUID] = useState("");
   useEffect(() => {
     if ((selectedId || id) && config.length > 0) {
-      const data = config[0];
-      for (const [key, value] of Object.entries(data)) {
-        if (value.id === selectedId || value.id === id) {
-          setTopic(data[key]);
-          setModifyTopic({ ...data[key], conversation: [] });
-          setCurrentNode(data[key]);
-          setConversation([
-            {
-              sender: "system",
-              questionAI: data[key].question,
-              questionUser: null,
-              systemAnswer: null,
-              userAnswer: null,
-              isAnswer: false,
-              options: [...Object.keys(data[key].subtitles)],
-            },
-          ]);
-        }
+      const data = config[0].topics.filter((f) => f.id === id);
+      if (data && Object.keys(data).length > 0) {
+        setTopic(data);
+        setModifyTopic({ ...data, conversation: [] });
+        setCurrentNode(data);
+        setConversation([
+          {
+            role: "system",
+            questionAI: data[0].question,
+            userAnswer: data[0].userAnswer1 || null,
+            options: [...data[0].subtitles],
+          },
+        ]);
       }
     }
   }, [config, selectedId, id]);
@@ -67,137 +60,176 @@ function Dashboard() {
     navigate(0);
   };
 
-  const handleOptionClick = async (key) => {
-    setAnswerTwo(key);
-    const lastAnswer =
-      currentNode.subtopics &&
-      currentNode.subtopics.length > 0 &&
-      currentNode.subtopics.some((s) => s === key);
-    setLastAnswer(lastAnswer);
-    let chatResponse = "";
-    setLoading(true);
-    const dataToModify = { ...modifyTopic };
-    if (lastAnswer) {
-      try {
-        let options = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            uuid: userId || localStorage.getItem("uuid"),
-            title: `${topic.name} - ${answerOne} and ${key}`,
-          }),
-        };
-        const res = await fetch("/api/add-conversation", options);
-        if (res.status !== 200) {
-          throw new Error("Bad Response");
+  const handleOptionClick = async (data) => {
+    const conversationData = [...conversation];
+    conversationData.forEach((topics) => {
+      topics.options.forEach((option) => {
+        if (option.id === data.id) {
+          topics.userAnswer = data.key;
         }
-        const resuuid = await res.json();
-        setMessageUUID(resuuid);
-        options = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            prompt: `${prompt} and ${key}`,
-            userUUID: userId || localStorage.getItem("uuid"),
-            messageUUID: resuuid,
-          }),
-        };
-        const response = await fetch("/api/ask", options);
-        if (response.status !== 200) {
-          throw new Error("Bad Response");
-        }
-        const resChat = await response.json();
-        chatResponse = resChat;
-        chatResponse = formatTextToParagraphs(chatResponse.answer);
-        setConversation((prev) => {
-          const updated = [...prev];
-          dataToModify["conversation"].push({
-            questionAI: updated[updated.length - 1].question,
-            userAnswer: key,
-          });
-          dataToModify["conversation"].push({
-            questionAI: `${prompt} and ${key}`,
-            systemAnswer: resChat.answer,
-          });
-          updated[updated.length - 1].systemAnswer = chatResponse;
-          updated[updated.length - 1].chat = key;
-          updated[updated.length - 1].isAnswer = true;
-          return updated;
-        });
-        setIsChatEnded(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      setAnswerOne(key);
-      setConversation((prev) => {
-        const updated = [...prev];
-        dataToModify["conversation"].push({
-          questionAI: updated[updated.length - 1].question,
-          userAnswer: key,
-        });
-        updated[updated.length - 1].userAnswer = key;
-        updated[updated.length - 1].isAnswer = true;
-        const promptSting = `Hi chat, give me all information you have on ${key}`;
-        setPrompt(promptSting);
-        return updated;
       });
-      if (currentNode.subtitles && currentNode.subtitles[key]) {
-        const nextNode = currentNode.subtitles[key];
-        setCurrentNode(nextNode);
-        setConversation((prev) => [
-          ...prev,
-          {
-            questionAI: nextNode.question,
-            questionUser: null,
-            userAnswer: null,
-            systemAnswer: null,
-            isAnswer: false,
-            options: nextNode.subtopics || [],
-          },
-        ]);
-      }
+    });
+
+    if (data.subtopics) {
+      setConversation([
+        ...conversationData,
+        {
+          role: "system",
+          questionAI: data.question,
+          userAnswer: data.userAnswer2 || null,
+          options: data.subtopics,
+        },
+      ]);
+      const promptSting = `Hi chat, give me all information you have on ${data.key}`;
+      setPrompt(promptSting);
+    } else {
+      setConversation([...conversationData]);
+      setLoading(true);
+      setIsChatEnded(true);
     }
-    setModifyTopic({ ...dataToModify });
-    setLoading(false);
+
+    // setConversation((prev) => {
+    //   const updated = [...prev];
+    //   console.log(updated);
+    //   // dataToModify["conversation"].push({
+    //   //   questionAI: updated[updated.length - 1].question,
+    //   //   userAnswer: key,
+    //   // });
+    //   //updated[updated.length - 1].userAnswer = key;
+    //   updated[updated.length - 1].isAnswer = true;
+    //   const promptSting = `Hi chat, give me all information you have on ${data.key}`;
+    //   setPrompt(promptSting);
+    //   return updated;
+    // });
+
+    // setAnswerTwo(key);
+    // const lastAnswer =
+    //   currentNode.subtopics &&
+    //   currentNode.subtopics.length > 0 &&
+    //   currentNode.subtopics.some((s) => s === key);
+    // setLastAnswer(lastAnswer);
+    // let chatResponse = "";
+    // setLoading(true);
+    // const dataToModify = { ...modifyTopic };
+    // if (lastAnswer) {
+    //   try {
+    //     let options = {
+    //       method: "POST",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         uuid: userId || localStorage.getItem("uuid"),
+    //         title: `${topic.name} - ${answerOne} and ${key}`,
+    //       }),
+    //     };
+    //     const res = await fetch("/api/add-conversation", options);
+    //     if (res.status !== 200) {
+    //       throw new Error("Bad Response");
+    //     }
+    //     const resuuid = await res.json();
+    //     setMessageUUID(resuuid);
+    //     options = {
+    //       method: "POST",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({
+    //         prompt: `${prompt} and ${key}`,
+    //         userUUID: userId || localStorage.getItem("uuid"),
+    //         messageUUID: resuuid,
+    //       }),
+    //     };
+    //     const response = await fetch("/api/ask", options);
+    //     if (response.status !== 200) {
+    //       throw new Error("Bad Response");
+    //     }
+    //     const resChat = await response.json();
+    //     chatResponse = resChat;
+    //     chatResponse = formatTextToParagraphs(chatResponse.answer);
+    //     setConversation((prev) => {
+    //       const updated = [...prev];
+    //       dataToModify["conversation"].push({
+    //         questionAI: updated[updated.length - 1].question,
+    //         userAnswer: key,
+    //       });
+    //       dataToModify["conversation"].push({
+    //         questionAI: `${prompt} and ${key}`,
+    //         systemAnswer: resChat.answer,
+    //       });
+    //       updated[updated.length - 1].systemAnswer = chatResponse;
+    //       updated[updated.length - 1].chat = key;
+    //       updated[updated.length - 1].isAnswer = true;
+    //       return updated;
+    //     });
+    //     setIsChatEnded(true);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // } else {
+    //   setAnswerOne(key);
+    //   setConversation((prev) => {
+    //     const updated = [...prev];
+    //     dataToModify["conversation"].push({
+    //       questionAI: updated[updated.length - 1].question,
+    //       userAnswer: key,
+    //     });
+    //     updated[updated.length - 1].userAnswer = key;
+    //     updated[updated.length - 1].isAnswer = true;
+    //     const promptSting = `Hi chat, give me all information you have on ${key}`;
+    //     setPrompt(promptSting);
+    //     return updated;
+    //   });
+    //   if (currentNode.subtitles && currentNode.subtitles[key]) {
+    //     const nextNode = currentNode.subtitles[key];
+    //     setCurrentNode(nextNode);
+    //     setConversation((prev) => [
+    //       ...prev,
+    //       {
+    //         questionAI: nextNode.question,
+    //         questionUser: null,
+    //         userAnswer: null,
+    //         systemAnswer: null,
+    //         isAnswer: false,
+    //         options: nextNode.subtopics || [],
+    //       },
+    //     ]);
+    //   }
+    // }
+    // setModifyTopic({ ...dataToModify });
+    // setLoading(false);
   };
 
   const handleInputSubmit = async (e) => {
-    e.preventDefault();
-    const userInput = e.target.elements.userInput.value;
-    setLoading(true);
-    try {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: userInput,
-          userUUID: userId || localStorage.getItem("uuid"),
-          messageUUID,
-        }),
-      };
-
-      const response = await fetch("/api/ask", options);
-      if (response.status !== 200) {
-        throw new Error("Bad Response");
-      }
-      setLoading(false);
-      let chatResponse = await response.json();
-      chatResponse = formatTextToParagraphs(chatResponse.answer);
-      setConversation((prev) => [
-        ...prev,
-        {
-          questionUser: userInput,
-          systemAnswer: chatResponse,
-          options: [],
-          sender: "system",
-        },
-      ]);
-
-      e.target.elements.userInput.value = "";
-    } catch (error) {
-      console.log(error);
-    }
+    // e.preventDefault();
+    // const userInput = e.target.elements.userInput.value;
+    // setLoading(true);
+    // try {
+    //   const options = {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       prompt: userInput,
+    //       userUUID: userId || localStorage.getItem("uuid"),
+    //       messageUUID,
+    //     }),
+    //   };
+    //   const response = await fetch("/api/ask", options);
+    //   if (response.status !== 200) {
+    //     throw new Error("Bad Response");
+    //   }
+    //   setLoading(false);
+    //   let chatResponse = await response.json();
+    //   chatResponse = formatTextToParagraphs(chatResponse.answer);
+    //   setConversation((prev) => [
+    //     ...prev,
+    //     {
+    //       questionUser: userInput,
+    //       systemAnswer: chatResponse,
+    //       options: [],
+    //       sender: "system",
+    //     },
+    //   ]);
+    //   e.target.elements.userInput.value = "";
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const formatTextToParagraphs = (inputText) => {
@@ -224,7 +256,6 @@ function Dashboard() {
           conversation={conversation}
           handleOptionClick={handleOptionClick}
           loading={loading}
-          lastAnswer={lastAnswer}
         />
         {isChatEnded && <CustomInput handleInputSubmit={handleInputSubmit} />}
       </ConversationContainer>
@@ -234,9 +265,7 @@ function Dashboard() {
 
 const DashboardContainer = styled.div`
   width: 100%;
-  height: 100vh;
-  overflow: auto;
-
+  overflow: hidden;
   .subtitle {
     border: 1px solid white;
     padding: 5px;
