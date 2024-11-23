@@ -124,7 +124,7 @@ async function setMessages(data, uuid) {
   }
 }
 
-async function setConversation(uuid, title) {
+async function setConversation(uuid, title, history) {
   try {
     await client.connect();
     const database = client.db(process.env.DB);
@@ -133,13 +133,32 @@ async function setConversation(uuid, title) {
     const conversationUUID = uuidv4();
     const object = [
       ...user[0].conversations,
-      { key: conversationUUID, name: title, messages: [] },
+      { key: conversationUUID, name: title, messages: [], history: history },
     ];
     await collection.updateOne(
       { key: uuid },
       { $set: { conversations: object } }
     );
     return conversationUUID;
+  } catch (error) {
+    return new Error("Failed to fetch from DB");
+  }
+}
+
+async function setHistory(uuid, history, messageUUID) {
+  try {
+    await client.connect();
+    const database = client.db(process.env.DB);
+    const collection = database.collection(process.env.USER_COLLECTION);
+    const user = await collection
+      .find({ key: uuid }, { projection: { _id: 0, registered: 0 } })
+      .toArray();
+    const index = user[0].conversations.findIndex((c) => c.key === messageUUID);
+    user[0].conversations[index].history = history;
+    await collection.updateOne(
+      { key: uuid },
+      { $set: { conversations: user[0].conversations } }
+    );
   } catch (error) {
     return new Error("Failed to fetch from DB");
   }
@@ -154,4 +173,5 @@ module.exports = {
   getMessages,
   setMessages,
   setConversation,
+  setHistory,
 };

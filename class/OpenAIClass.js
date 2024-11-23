@@ -19,7 +19,6 @@ class OpenAIClass {
         role: "system",
         content: response.choices[0].message.content,
       });
-      console.log("message", message);
       await setMessages(message, userUUID);
       return response.choices[0].message.content;
     } catch (error) {

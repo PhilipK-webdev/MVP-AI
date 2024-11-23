@@ -2,6 +2,7 @@ import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import Avatar from "@mui/material/Avatar";
 import randomUser from "../assets/randomAvatar.png";
+import { MdMessage } from "react-icons/md";
 function CustomInput({ handleInputSubmit }) {
   return (
     <form
@@ -24,15 +25,16 @@ function CustomInput({ handleInputSubmit }) {
           width: "100%",
         }}
         startAdornment={
-          <InputAdornment position="end">
-            <Avatar
-              src={randomUser}
-              sx={{
-                width: 23,
-                height: 23,
-                marginRight: "5px",
-              }}
-            />
+          <InputAdornment
+            position="end"
+            style={{
+              backgroundColor: "rgb(240, 240, 240, 0.6)",
+              borderRadius: "10px",
+              fontSize: "25px",
+              padding: "5px",
+            }}
+          >
+            <MdMessage />
           </InputAdornment>
         }
       />

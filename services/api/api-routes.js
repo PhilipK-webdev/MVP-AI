@@ -7,6 +7,7 @@ const {
   getUser,
   getMessages,
   setConversation,
+  setHistory,
 } = require("../../configuration/db");
 const { configService } = require("../config/getConfig.service");
 const OpenAIClass = require("../../class/OpenAIClass");
@@ -82,10 +83,23 @@ router.get("/message", async (req, res) => {
 
 router.post("/add-conversation", async (req, res) => {
   try {
-    const { uuid, title } = req.body;
-    const result = await setConversation(uuid, title);
+    const { uuid, title, history } = req.body;
+    const result = await setConversation(uuid, title, history);
     res.json(result);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/add-history", async (req, res) => {
+  try {
+    const { uuid, history, messageUUID } = req.body;
+    const result = await setHistory(uuid, history, messageUUID);
+    const data = await getUser(uuid);
+    return res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

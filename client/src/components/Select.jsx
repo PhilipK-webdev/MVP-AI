@@ -117,7 +117,7 @@ function Select() {
   return (
     <SelectContainer>
       <ImageLogo src={newLogo} alt="logo image" />
-      <Title>Topics</Title>
+      <Title>What are you looking for?</Title>
       <Box>
         {data &&
           data.length > 0 &&
@@ -141,15 +141,14 @@ const SelectContainer = styled.main`
 `;
 
 const Title = styled.header`
-  width: 200px;
   heigth: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background: white;
+  background-color: rgba(50, 50, 50, 0.3);
   padding: 10px;
-  color: #7615e1;
+  color: white;
   font-weight: bold;
 `;
 
@@ -170,7 +169,8 @@ const BoxIcon = styled.div`
   border-radius: 10px;
   width: 100px;
   height: 80px;
-  background: #7615e1;
+  //background: #7615e1;
+  background-color: rgba(90, 61, 125, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;

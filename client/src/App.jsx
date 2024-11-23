@@ -15,15 +15,14 @@ import { useEffect } from "react";
 function App() {
   const location = useLocation();
 
-  useEffect(() => {
-    console.log("Location changed");
-    console.log(location);
-  }, [location]);
+  useEffect(() => {}, [location]);
 
   return (
     <>
       <GlobalStyles />
-      <AppContainer isDashboard={location.pathname.includes("dashboard")}>
+      <AppContainer
+        isdashboard={location.pathname.includes("dashboard") ? "true" : "false"}
+      >
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/select" element={<SelectPage />} />
@@ -39,7 +38,8 @@ const AppContainer = styled.main`
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: ${(props) => (props.isDashboard ? "start" : "center")};
+  align-items: ${(props) =>
+    props.isdashboard === "true" ? "start" : "center"};
   height: 100vh;
 `;
 export default App;

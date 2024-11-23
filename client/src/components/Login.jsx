@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
 import { StateContext } from "../context/state.jsx";
+import Logo from "../assets/logo.png";
 function Login() {
-  const currentData = new Date().getFullYear();
   const { userId } = useContext(StateContext);
   const navigate = useNavigate();
   const handleLogin = async (e) => {
@@ -38,8 +38,10 @@ function Login() {
       <ImageLogo src={newLogo} alt="logo image" />
       <Section>
         <div>
-          <p>{currentData}</p>
-          <p>What can I help with?</p>
+          <p className="question">
+            <img src={Logo} style={{ width: "30px", marginRight: "2px" }} />{" "}
+            <span>What can I help with?</span>
+          </p>
           <p
             style={{
               fontSize: "12px",
@@ -64,7 +66,7 @@ const LoginContainer = styled.main`
 `;
 
 const ImageLogo = styled.img`
-  width: 50%;
+  width: 100%;
   height: auto;
 `;
 
@@ -82,6 +84,12 @@ const Section = styled.section`
   p {
     margin: 0px;
     padding: 5px;
+  }
+
+  .question {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 `;
 

@@ -1,7 +1,7 @@
 import { styled, useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { StateContext } from "../context/state.jsx";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -9,36 +9,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-
+import { BsChatSquareDotsFill } from "react-icons/bs";
+import styled2 from "styled-components";
 const drawerWidth = 240;
-
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0,
-        },
-      },
-    ],
-  })
-);
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -49,7 +23,13 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-function CustomDrawer({ open, handleDrawerClose }) {
+function CustomDrawer({
+  open,
+  handleDrawerClose,
+  handleNewConversation,
+  anchor,
+  getOldConversation,
+}) {
   const theme = useTheme();
   const { userData } = useContext(StateContext);
   const userExists =
@@ -81,9 +61,11 @@ function CustomDrawer({ open, handleDrawerClose }) {
         <DrawerHeader
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
           }}
         >
+          {" "}
+          <BsChatSquareDotsFill onClick={handleNewConversation} />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon style={{ color: "white" }} />
@@ -97,22 +79,37 @@ function CustomDrawer({ open, handleDrawerClose }) {
           <List>
             {userData[0].conversations.map((conversation, index) => {
               return (
-                <ListItem key={index} disablePadding>
-                  <ListItemButton>
-                    <ListItemText primary={conversation.name} />
+                <CustomListItem key={index} disablePadding>
+                  <div style={{ paddingLeft: "10px" }}>{index + 1}.</div>
+                  <ListItemButton
+                    onClick={() => getOldConversation(conversation)}
+                  >
+                    <ListItemText
+                      primary={conversation.name}
+                      primaryTypographyProps={{
+                        fontSize: "12px",
+                        width: "100px",
+                      }}
+                    />
                   </ListItemButton>
-                </ListItem>
+                </CustomListItem>
               );
             })}
           </List>
         )}
         <Divider style={{ borderColor: "white" }} />
       </Drawer>
-      {/* <Main open={open}>
-        <DrawerHeader />
-      </Main> */}
     </>
   );
 }
 
+const CustomListItem = styled2(ListItem)`
+
+border: 1px solid white;
+border-radius: 10px;
+width: 90%;
+margin-left: auto;
+margin-right: auto;
+margin-bottom: 10px;
+`;
 export default CustomDrawer;
