@@ -3,7 +3,7 @@ import newLogo from "../assets/newLogo.png";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
-import { StateContext } from "../context/state.jsx";
+import { StateContext } from "../context/CustomContext";
 import Logo from "../assets/logo.png";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

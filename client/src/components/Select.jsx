@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import newLogo from "../assets/newLogo.png";
 import styled from "styled-components";
-import { StateContext } from "../context/state.jsx";
+import { StateContext } from "../context/CustomContext";
 import Sport from "../assets/training.gif";
 import ShoppingCart from "../assets/shopping-cart.gif";
 import Music from "../assets/music.gif";

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { StateContext } from "../context/state.jsx";
+import { StateContext } from "../context/CustomContext";
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import CustomDrawer from "./CustomDrawer.jsx";

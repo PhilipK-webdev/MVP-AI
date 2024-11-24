@@ -1,7 +1,5 @@
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
-import Avatar from "@mui/material/Avatar";
-import randomUser from "../assets/randomAvatar.png";
 import { MdMessage } from "react-icons/md";
 function CustomInput({ handleInputSubmit }) {
   return (

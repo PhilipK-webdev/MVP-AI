@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
+import { StateContext } from "./CustomContext";
 // Create a Context for the theme
-export const StateContext = createContext();
+// export const StateContext = createContext();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Create a provider component
 export const StateProvider = ({ children }) => {
@@ -35,6 +35,7 @@ export const StateProvider = ({ children }) => {
         const _userData = await response.json();
         setUserData(_userData);
       } catch (error) {
+        console.log("inside error");
         console.log(error);
       }
     }

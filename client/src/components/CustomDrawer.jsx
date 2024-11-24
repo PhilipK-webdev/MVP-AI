@@ -2,7 +2,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import { useContext } from "react";
-import { StateContext } from "../context/state.jsx";
+import { StateContext } from "../context/CustomContext";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
