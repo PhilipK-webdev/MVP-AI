@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 // Create a Context for the theme
 export const StateContext = createContext();
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Create a provider component
 export const StateProvider = ({ children }) => {
   const [config, setConfigData] = useState([]);
@@ -15,7 +15,7 @@ export const StateProvider = ({ children }) => {
   }, []);
 
   const getConfig = async () => {
-    const response = await fetch("/api/config");
+    const response = await fetch(`${API_BASE_URL}/config`);
     if (response.status !== 200) {
       return;
     }
@@ -28,7 +28,7 @@ export const StateProvider = ({ children }) => {
     if (uuid) {
       setUserId(uuid);
       try {
-        const response = await fetch(`/api/user/?id=${uuid}`);
+        const response = await fetch(`${API_BASE_URL}/user/?id=${uuid}`);
         if (response.status !== 200) {
           throw new Error("Bad request");
         }

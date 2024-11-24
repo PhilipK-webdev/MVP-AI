@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
 import { StateContext } from "../context/state.jsx";
 import Logo from "../assets/logo.png";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Login() {
   const { userId } = useContext(StateContext);
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ function Login() {
           }),
         };
 
-        const response = await fetch("/api/add", options);
+        const response = await fetch(`${API_BASE_URL}/add`, options);
         if (response.status !== 200) {
           throw new Error("Bad Response");
         }

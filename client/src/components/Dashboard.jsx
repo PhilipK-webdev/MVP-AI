@@ -6,7 +6,7 @@ import CustomDrawer from "./CustomDrawer.jsx";
 import CustomAppBar from "./CustomAppBar.jsx";
 import CustomInput from "./CustomInput.jsx";
 import Chat from "./Chat.jsx";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Dashboard() {
   const { selectedId, config, userId, setUserData } = useContext(StateContext);
   const { id } = useParams();
@@ -95,7 +95,7 @@ function Dashboard() {
           history,
         }),
       };
-      const res = await fetch("/api/add-conversation", options);
+      const res = await fetch(`${API_BASE_URL}/add-conversation`, options);
       if (res.status !== 200) {
         throw new Error("Bad Response");
       }
@@ -110,7 +110,7 @@ function Dashboard() {
           messageUUID: resuuid,
         }),
       };
-      const response = await fetch("/api/ask", options);
+      const response = await fetch(`${API_BASE_URL}/ask`, options);
       if (response.status !== 200) {
         throw new Error("Bad Response");
       }
@@ -136,7 +136,10 @@ function Dashboard() {
         }),
       };
 
-      const responseHistory = await fetch("/api/add-history", options);
+      const responseHistory = await fetch(
+        `${API_BASE_URL}/add-history`,
+        options
+      );
       if (responseHistory.status !== 200) {
         console.log("error");
       }
@@ -168,7 +171,7 @@ function Dashboard() {
           messageUUID,
         }),
       };
-      const response = await fetch("/api/ask", options);
+      const response = await fetch(`${API_BASE_URL}/ask`, options);
       if (response.status !== 200) {
         throw new Error("Bad Response");
       }
@@ -192,7 +195,10 @@ function Dashboard() {
           messageUUID,
         }),
       };
-      const responseHistory = await fetch("/api/add-history", options);
+      const responseHistory = await fetch(
+        `${API_BASE_URL}/add-history`,
+        options
+      );
       if (responseHistory.status !== 200) {
         console.log("error");
       }
