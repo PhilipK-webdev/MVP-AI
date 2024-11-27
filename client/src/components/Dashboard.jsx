@@ -84,7 +84,7 @@ function Dashboard() {
     } else {
       setConversation([...conversationData]);
       setLoading(true);
-      setIsChatEnded(true);
+
       history = [...conversation];
       let options = {
         method: "POST",
@@ -154,6 +154,7 @@ function Dashboard() {
         },
       ]);
       setLoading(false);
+      setIsChatEnded(true);
     }
   };
 
@@ -288,7 +289,6 @@ const DashboardContainer = styled.div`
 
   .selected-answer {
     background-color: rgba(173, 216, 230, 0.6);
-    //color: #7615e1;
     color: white;
     font-weight: 700;
     border: 1px solid white;
@@ -310,109 +310,3 @@ const ConversationContainer = styled.div`
   padding: 20px;
 `;
 export default Dashboard;
-// setConversation((prev) => {
-//   const updated = [...prev];
-//   console.log(updated);
-//   // dataToModify["conversation"].push({
-//   //   questionAI: updated[updated.length - 1].question,
-//   //   userAnswer: key,
-//   // });
-//   //updated[updated.length - 1].userAnswer = key;
-//   updated[updated.length - 1].isAnswer = true;
-//   const promptSting = `Hi chat, give me all information you have on ${data.key}`;
-//   setPrompt(promptSting);
-//   return updated;
-// });
-
-// setAnswerTwo(key);
-// const lastAnswer =
-//   currentNode.subtopics &&
-//   currentNode.subtopics.length > 0 &&
-//   currentNode.subtopics.some((s) => s === key);
-// setLastAnswer(lastAnswer);
-// let chatResponse = "";
-// setLoading(true);
-// const dataToModify = { ...modifyTopic };
-// if (lastAnswer) {
-//   try {
-//     let options = {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         uuid: userId || localStorage.getItem("uuid"),
-//         title: `${topic.name} - ${answerOne} and ${key}`,
-//       }),
-//     };
-//     const res = await fetch("/api/add-conversation", options);
-//     if (res.status !== 200) {
-//       throw new Error("Bad Response");
-//     }
-//     const resuuid = await res.json();
-//     setMessageUUID(resuuid);
-//     options = {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         prompt: `${prompt} and ${key}`,
-//         userUUID: userId || localStorage.getItem("uuid"),
-//         messageUUID: resuuid,
-//       }),
-//     };
-//     const response = await fetch("/api/ask", options);
-//     if (response.status !== 200) {
-//       throw new Error("Bad Response");
-//     }
-//     const resChat = await response.json();
-//     chatResponse = resChat;
-//     chatResponse = formatTextToParagraphs(chatResponse.answer);
-//     setConversation((prev) => {
-//       const updated = [...prev];
-//       dataToModify["conversation"].push({
-//         questionAI: updated[updated.length - 1].question,
-//         userAnswer: key,
-//       });
-//       dataToModify["conversation"].push({
-//         questionAI: `${prompt} and ${key}`,
-//         systemAnswer: resChat.answer,
-//       });
-//       updated[updated.length - 1].systemAnswer = chatResponse;
-//       updated[updated.length - 1].chat = key;
-//       updated[updated.length - 1].isAnswer = true;
-//       return updated;
-//     });
-//     setIsChatEnded(true);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// } else {
-//   setAnswerOne(key);
-//   setConversation((prev) => {
-//     const updated = [...prev];
-//     dataToModify["conversation"].push({
-//       questionAI: updated[updated.length - 1].question,
-//       userAnswer: key,
-//     });
-//     updated[updated.length - 1].userAnswer = key;
-//     updated[updated.length - 1].isAnswer = true;
-//     const promptSting = `Hi chat, give me all information you have on ${key}`;
-//     setPrompt(promptSting);
-//     return updated;
-//   });
-//   if (currentNode.subtitles && currentNode.subtitles[key]) {
-//     const nextNode = currentNode.subtitles[key];
-//     setCurrentNode(nextNode);
-//     setConversation((prev) => [
-//       ...prev,
-//       {
-//         questionAI: nextNode.question,
-//         questionUser: null,
-//         userAnswer: null,
-//         systemAnswer: null,
-//         isAnswer: false,
-//         options: nextNode.subtopics || [],
-//       },
-//     ]);
-//   }
-// }
-// setModifyTopic({ ...dataToModify });
-// setLoading(false);

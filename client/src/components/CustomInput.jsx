@@ -11,7 +11,7 @@ function CustomInput({ handleInputSubmit }) {
         id="standard-adornment-amount"
         disableUnderline={true}
         type="text"
-        autoFocus={true}
+        //autoFocus={true}
         name="userInput"
         style={{
           display: "flex",

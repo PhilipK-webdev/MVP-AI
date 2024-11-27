@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../assets/logo.png";
 import newLogo from "../assets/newLogo.png";
 import styled from "styled-components";
 import { StateContext } from "../context/CustomContext";
@@ -169,8 +168,7 @@ const BoxIcon = styled.div`
   border-radius: 10px;
   width: 100px;
   height: 80px;
-  //background: #7615e1;
-  background-color: rgba(90, 61, 125, 0.7);
+  background-color: rgb(105 37 188 / 35%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,6 +176,14 @@ const BoxIcon = styled.div`
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  border: 1px solid #4d3838;
 `;
 
 export default Select;
+
+//rgb(165 155 155 / 20%);
+//color:white
+//font-size:16px
+// userQuestion - color black
+// box - background - rgb(105 37 188 / 35%)
+// box - border-radius - 1px solid #4d3838

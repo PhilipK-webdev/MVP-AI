@@ -1,9 +1,6 @@
 import Loader from "./Loader";
 import { Divider } from "@mui/material";
 import Logo from "../assets/logo.png";
-import newLogo from "../assets/newLogo.png";
-import Avatar from "@mui/material/Avatar";
-import randomUser from "../assets/randomAvatar.png";
 import styled from "styled-components";
 
 function Chat({ conversation, handleOptionClick, loading }) {
@@ -22,17 +19,7 @@ function Chat({ conversation, handleOptionClick, loading }) {
                 ) : (
                   entry.questionUser && (
                     <QuestionUserContainer>
-                      <QuestionUser>
-                        {/* <Avatar
-                          src={randomUser}
-                          sx={{
-                            width: 23,
-                            height: 23,
-                            marginRight: "5px",
-                          }}
-                        /> */}
-                        {entry.questionUser}
-                      </QuestionUser>
+                      <QuestionUser>{entry.questionUser}</QuestionUser>
                     </QuestionUserContainer>
                   )
                 )}
@@ -45,14 +32,6 @@ function Chat({ conversation, handleOptionClick, loading }) {
 
                   {entry.userAnswer && (
                     <UserAnswerContainer>
-                      {/* <Avatar
-                        src={randomUser}
-                        sx={{
-                          width: 23,
-                          height: 23,
-                          marginRight: "5px",
-                        }}
-                      /> */}
                       {entry.userAnswer}
                     </UserAnswerContainer>
                   )}
@@ -95,14 +74,6 @@ function Chat({ conversation, handleOptionClick, loading }) {
 
                       {entry.userAnswer && (
                         <UserAnswerContainer>
-                          {/* <Avatar
-                            src={randomUser}
-                            sx={{
-                              width: 23,
-                              height: 23,
-                              marginRight: "5px",
-                            }}
-                          /> */}
                           {entry.userAnswer}
                         </UserAnswerContainer>
                       )}
@@ -148,7 +119,6 @@ const QuestionAIContainer = styled.div`
   margin-bottom: 10px;
   margin-top: 10px;
   border-radius: 10px;
-  //background: #fcfffe;
   background-color: rgba(50, 50, 50, 0.3);
   color: white;
 `;
@@ -158,7 +128,6 @@ const ImageLogo = styled.img`
   height: 45px;
   margin-right: 5px;
   border-radius: 50%;
-  //background: #a092fe;
   background-color: rgba(173, 216, 230, 0.6);
 `;
 
@@ -171,17 +140,14 @@ const QuestionUserContainer = styled.div`
 const QuestionUser = styled.div`
   text-align: right;
   font-weight: 500;
-  //border: 3px solid #526e48;
   border: 1px solid #fcfffe;
   padding: 10px;
   font-size: 15px;
   margin-bottom: 10px;
   margin-top: 10px;
   border-radius: 10px;
-  // background: white;
   background-color: rgba(173, 216, 230, 0.6);
-  //color: #526e48;
-  color: white;
+  color: black;
   display: flex;
   justify-content: center;
 `;
@@ -195,7 +161,6 @@ const UserAnswerContainer = styled.div`
   margin-bottom: 10px;
   margin-top: 10px;
   border-radius: 10px;
-  //background: #a092fe;
   background-color: rgba(173, 216, 230, 0.6);
   color: white;
   width: fit-content;
@@ -208,14 +173,12 @@ const SystemAnswerContainer = styled.div`
   display: flex;
   font-weight: 500;
   padding: 10px;
-  font-size: 15px;
+  font-size:16px
   margin-bottom: 10px;
   margin-top: 10px;
   border-radius: 10px;
-  //background: #fcfffe;
-  background-color: rgba(50, 50, 50, 0.3);
-  //color: #b5b5b6;
-  color: black;
+  background-color: rgb(165 155 155 / 20%);
+  color: white;
   width: 100%;
 `;
 export default Chat;
